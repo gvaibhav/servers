@@ -1,0 +1,501 @@
+{
+  "info": {
+    "name": "Memory Server - MCP API",
+    "description": "Collection for interacting with the Knowledge Graph Memory Server using the Model Context Protocol (MCP)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Server Management",
+      "description": "Endpoints for managing server connections",
+      "item": [
+        {
+          "name": "Initialize Connection (Session Creation)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": \"1\",\n    \"method\": \"initialize\",\n    \"params\": {\n        \"clientInfo\": {\n            \"name\": \"postman-client\",\n            \"version\": \"1.0.0\"\n        },\n        \"capabilities\": {}\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Initialize a new MCP session with the server"
+          },
+          "response": []
+        },
+        {
+          "name": "Open SSE Connection",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "mcp-session-id",
+                "value": "{{session_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Open a server-sent events connection to receive notifications from the server"
+          },
+          "response": []
+        },
+        {
+          "name": "End Session",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "mcp-session-id",
+                "value": "{{session_id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Terminate an active MCP session"
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:3000/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Check server health and get active session count"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "MCP Operations",
+      "description": "Model Context Protocol operations",
+      "item": [
+        {
+          "name": "List Available Tools",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "mcp-session-id",
+                "value": "{{session_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": \"2\",\n    \"method\": \"listTools\",\n    \"params\": {}\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Get a list of all available tools from the server"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Knowledge Graph Operations",
+      "description": "Operations for managing the Knowledge Graph",
+      "item": [
+        {
+          "name": "Create Entities",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "mcp-session-id",
+                "value": "{{session_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": \"3\",\n    \"method\": \"callTool\",\n    \"params\": {\n        \"name\": \"create_entities\",\n        \"arguments\": {\n            \"entities\": [\n                {\n                    \"name\": \"John Doe\",\n                    \"entityType\": \"person\",\n                    \"observations\": [\"Software engineer at Acme Corp\", \"Lives in San Francisco\"]\n                },\n                {\n                    \"name\": \"Acme Corp\",\n                    \"entityType\": \"organization\",\n                    \"observations\": [\"Founded in 2010\", \"Based in San Francisco\"]\n                }\n            ]\n        }\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Create new entities in the knowledge graph"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Relations",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "mcp-session-id",
+                "value": "{{session_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": \"4\",\n    \"method\": \"callTool\",\n    \"params\": {\n        \"name\": \"create_relations\",\n        \"arguments\": {\n            \"relations\": [\n                {\n                    \"from\": \"John Doe\",\n                    \"to\": \"Acme Corp\",\n                    \"relationType\": \"works at\"\n                }\n            ]\n        }\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Create new relations between entities in the knowledge graph"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Observations",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "mcp-session-id",
+                "value": "{{session_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": \"5\",\n    \"method\": \"callTool\",\n    \"params\": {\n        \"name\": \"add_observations\",\n        \"arguments\": {\n            \"observations\": [\n                {\n                    \"entityName\": \"John Doe\",\n                    \"contents\": [\"Graduated from MIT in 2008\", \"Speaks English and Spanish\"]\n                },\n                {\n                    \"entityName\": \"Acme Corp\",\n                    \"contents\": [\"Has 500+ employees\", \"Specializes in AI products\"]\n                }\n            ]\n        }\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Add new observations to existing entities"
+          },
+          "response": []
+        },
+        {
+          "name": "Read Graph",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "mcp-session-id",
+                "value": "{{session_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": \"6\",\n    \"method\": \"callTool\",\n    \"params\": {\n        \"name\": \"read_graph\",\n        \"arguments\": {}\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Read the entire knowledge graph"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Nodes",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "mcp-session-id",
+                "value": "{{session_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": \"7\",\n    \"method\": \"callTool\",\n    \"params\": {\n        \"name\": \"search_nodes\",\n        \"arguments\": {\n            \"query\": \"San Francisco\"\n        }\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Search for nodes in the knowledge graph based on a query"
+          },
+          "response": []
+        },
+        {
+          "name": "Open Nodes",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "mcp-session-id",
+                "value": "{{session_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": \"8\",\n    \"method\": \"callTool\",\n    \"params\": {\n        \"name\": \"open_nodes\",\n        \"arguments\": {\n            \"names\": [\"John Doe\", \"Acme Corp\"]\n        }\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Open specific nodes in the knowledge graph by their names"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Observations",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "mcp-session-id",
+                "value": "{{session_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": \"9\",\n    \"method\": \"callTool\",\n    \"params\": {\n        \"name\": \"delete_observations\",\n        \"arguments\": {\n            \"deletions\": [\n                {\n                    \"entityName\": \"John Doe\",\n                    \"observations\": [\"Lives in San Francisco\"]\n                }\n            ]\n        }\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Delete specific observations from entities"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Relations",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "mcp-session-id",
+                "value": "{{session_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": \"10\",\n    \"method\": \"callTool\",\n    \"params\": {\n        \"name\": \"delete_relations\",\n        \"arguments\": {\n            \"relations\": [\n                {\n                    \"from\": \"John Doe\",\n                    \"to\": \"Acme Corp\",\n                    \"relationType\": \"works at\"\n                }\n            ]\n        }\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Delete relations from the knowledge graph"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Entities",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "mcp-session-id",
+                "value": "{{session_id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": \"11\",\n    \"method\": \"callTool\",\n    \"params\": {\n        \"name\": \"delete_entities\",\n        \"arguments\": {\n            \"entityNames\": [\"John Doe\"]\n        }\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/mcp",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3000",
+              "path": [
+                "mcp"
+              ]
+            },
+            "description": "Delete entities and their associated relations from the knowledge graph"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// For initialize request, save the session ID to a variable",
+          "if (pm.request.url.path[0] === \"mcp\" && pm.request.method === \"POST\" && pm.request.body.raw.includes(\"initialize\")) {",
+          "    var jsonData = pm.response.json();",
+          "    if (jsonData && jsonData.result && jsonData.result.sessionId) {",
+          "        pm.environment.set(\"session_id\", jsonData.result.sessionId);",
+          "        console.log(\"Session ID saved: \" + jsonData.result.sessionId);",
+          "    }",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "session_id",
+      "value": ""
+    }
+  ]
+}
